@@ -58,14 +58,6 @@ public class MyServer {
         }
     }
 
-//    public synchronized void broadcastMsgToNick(String nick, String msg, String namefrom){
-//        for (ClientHandler o : clients){
-//            if (o.getName().equals(nick)) {
-//                o.sendMsg("От " + namefrom +" "+ msg);
-//            }
-//        }
-//    }
-
     public synchronized void unsubscribe(ClientHandler o) {
         clients.remove(o);
     }
