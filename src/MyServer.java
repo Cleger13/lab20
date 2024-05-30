@@ -50,6 +50,22 @@ public class MyServer {
         }
     }
 
+    public synchronized void broadcastMsgToNick(String nameFrom, String nameTo, String msg) {
+        for (ClientHandler o : clients) {
+            if (o.getName().equals(nameTo)) {
+                o.sendMsg("Сообщение от: " + nameFrom + ": " + msg);
+            }
+        }
+    }
+
+//    public synchronized void broadcastMsgToNick(String nick, String msg, String namefrom){
+//        for (ClientHandler o : clients){
+//            if (o.getName().equals(nick)) {
+//                o.sendMsg("От " + namefrom +" "+ msg);
+//            }
+//        }
+//    }
+
     public synchronized void unsubscribe(ClientHandler o) {
         clients.remove(o);
     }
@@ -57,6 +73,4 @@ public class MyServer {
     public synchronized void subscribe(ClientHandler o) {
         clients.add(o);
     }
-
-
 }

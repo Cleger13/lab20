@@ -8,14 +8,13 @@ public class ClientHandler {
     private Socket socket;
     private DataInputStream in;
     private DataOutputStream out;
-
     private String name;
 
     public String getName() {
         return name;
     }
 
-    public ClientHandler(MyServer server, Socket socket) {
+    public ClientHandler(MyServer myServer, Socket socket) {
         try {
             this.myServer = myServer;
             this.socket = socket;
@@ -25,7 +24,7 @@ public class ClientHandler {
             new Thread(() -> {
                 try {
                     authentication();
-                    readMessage();
+                    readMessages();
                 }
                 catch (IOException e) {
                     e.printStackTrace();
@@ -57,7 +56,7 @@ public class ClientHandler {
                         sendMsg("Учетная запись уже используется");
                     }
                 } else {
-                    sendMsg("Неверные логин/пароль");
+                    sendMsg("Неверные логин или пароль");
                 }
             }
         }
@@ -66,11 +65,23 @@ public class ClientHandler {
     public void readMessages() throws IOException {
         while (true) {
             String strFromClient = in.readUTF();
-            System.out.println("от " + name + ": " + strFromClient);
+            System.out.println("От " + name + ": " + strFromClient);
+
             if (strFromClient.equals("/end")) {
                 return;
             }
-            myServer.broadcastMsg(name + ": " + strFromClient);
+
+            if (strFromClient.startsWith("/w")) {
+                String[] parts = strFromClient.split("\\s");
+
+                if (myServer.isNickBusy(parts[1])) {
+                    myServer.broadcastMsgToNick(name, parts[1], parts[2]);
+                } else {
+                    myServer.broadcastMsg(name + ": " + strFromClient);
+                }
+            } else {
+                myServer.broadcastMsg(name + ": " + strFromClient);
+            }
         }
     }
 
