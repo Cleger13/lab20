@@ -17,8 +17,6 @@ public class EchoClient extends JFrame {
     private Socket socket;
     private DataInputStream in;
     private DataOutputStream out;
-    private JTextField loginField;
-    private JTextField passField;
 
     public EchoClient() {
         try {
@@ -87,8 +85,6 @@ public class EchoClient extends JFrame {
         chatArea = new JTextArea();
         chatArea.setEditable(false);
         chatArea.setLineWrap(true);
-        loginField = new JTextField();
-        passField = new JTextField();
 
         add(new JScrollPane(chatArea), BorderLayout.CENTER);
 
